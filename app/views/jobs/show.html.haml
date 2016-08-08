@@ -1,0 +1,8 @@
+#jobs
+	.job
+		%h2= @job.title
+		%p= simple_format @job.description
+		%p= @job.company
+
+#links
+	= link_to "Home", root_path, class: "btn btn-sm btn-default"
