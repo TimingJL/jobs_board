@@ -289,6 +289,115 @@ Let's create a new file under `app/views/jobs/`,  then save it as `edit.html.ham
 				= link_to "Back", root_path
 ```
 
-Next thing we want to do is to add categories for our jobs. So to 
+# Categories 
+Next thing we want to do is to add categories for our jobs.    
+First thing we need to create a model.
+```console
+$ rails g model category name:string
+$ rake db:migrate
+```
+
+Next, what we wanna do is add the category ID  column to our job's table.
+```console
+$ rails g migration add_category_id_to_jobs category_id:integer
+$ rake db:migrate
+```
+
+Then we need to add association between our categories and our job's model.       
+In `app/models/category.rb`
+```ruby
+class Category < ApplicationRecord
+	has_many :jobs
+end
+```
+
+
+In `app/models/job.rb`
+```ruby
+class Job < ApplicationRecord
+	belongs_to :category
+end
+```
+
+So let's go into our rails console:
+```console
+$ rails c
+
+> Category.connection
+> Category
+> Category.create(name: "Full Time")
+> Category.create(name: "Part Time")
+> Category.create(name: "Freelance")
+> Category.create(name: "Consulting")
+
+> Category.all
+```
+
+Next, what we want to do is for each new job that is created we want to add the category ID to that specific job.       
+In `app/views/jobs/_form.html.haml`
+```haml
+= simple_form_for(@job, html: { class: 'form-horizontal'}) do |f|
+	= f.collection_select :category_id, Category.all, :id, :name, {promt: "Choose a category" }, input_html: { class: "dropdown-toggle" }
+	= f.input :title, label: "Job Title", input_html: { class: "form-control" }
+	= f.input :description, label: "Job Description", input_html: { class: "form-control" }
+	= f.input :company, label: "Your Company", input_html: { class: "form-control" }
+	= f.input :url, label: "Link to Job", input_html: { class: "form-control" }
+	%br/
+	= f.button :submit
+```
+![image](https://github.com/TimingJL/jobs_board/blob/master/pic/category.jpeg)
+
+
+Next, let's go to the `app/controllers/jobs_controller.rb`, we need to add the `category_id` in private action `jobs_params`.
+```ruby
+def jobs_params
+	params.require(:job).permit(:title, :description, :company, :url, :category_id)
+end
+```
+
+### Filter
+So, to filter those, we need to first list out all the categories. And then we need to change the index method inside of our jobs_controller to add a params to filter by.       
+
+First, we rename `application.html.erb` to `application.html.haml` under `app/views/layouts/`.
+```haml
+!!!
+%html
+%head
+	%title Ruby on Rails Jobs
+	= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+	= javascript_include_tag 'application', 'data-turbolinks-track' => true
+	= csrf_meta_tags
+
+%body
+	%nav.navbar.navbar-default
+		.container
+			.navbar-brand Rails Jobs
+			%ul.nav.navbar-nav
+				%li= link_to "All Jobs", root_path
+				- Category.all.each do |category|
+					%li= link_to category.name, jobs_path(category: category.name)
+			= link_to "New Job", new_job_path, class: "navbar-text navbar-right navbar-link"
+	.container
+		.col-md-6.col-md-offset-3
+			= yield
+```
+
+Next, inside of our controller `app/controllers/jobs_controller.rb`
+```ruby
+def index
+	if params[:category].blank?
+		@jobs = Job.all.order("created_at DESC")
+	else
+		@category_id = Category.find_by(name: params[:category]).id
+		@jobs = Job.where(category_id: @category_id).order("created_at DESC")
+	end
+end
+```    
+![image](https://github.com/TimingJL/jobs_board/blob/master/pic/filter.jpeg)
+
+
+# Styling
+What we need to do next is styling.
+
 
 To be continued...
