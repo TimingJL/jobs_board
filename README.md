@@ -246,7 +246,49 @@ In `app/views/jobs/index.html.haml`
 ```
 ![image](https://github.com/TimingJL/jobs_board/blob/master/pic/jobs_list_out.jpeg)
 
-# Delete And Edit
+# Delete And Edit(19:08)
+In our controller `app/controllers/jobs_controller.rb`
+```ruby
+def update
+	if @job.update(jobs_params)
+		redirect_to @job
+	else
+		render "Edit"
+	end
+end
 
+def destroy
+	@job.destroy
+	redirect_to root_path
+end
+```
+
+Then, in our show page `app/views/jobs/show.html.haml`, let's add more links
+```haml
+#jobs
+	.job
+		%h2= @job.title
+		%p= simple_format @job.description
+		%p= @job.company
+
+#links
+	= link_to "Home", root_path, class: "btn btn-sm btn-default"
+	= link_to "Edit", edit_job_path(@job), class: "btn btn-sm btn-default"
+	= link_to "Delete", job_path(@job), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-default"
+```
+
+Let's create a new file under `app/views/jobs/`,  then save it as `edit.html.haml`
+```haml
+.col-md-8.col-md-offset-2
+	.row
+		.panel.panel-default
+			.panel-heading
+				%h1 Edit Job
+			.panel-body
+				= render 'form'
+				= link_to "Back", root_path
+```
+
+Next thing we want to do is to add categories for our jobs. So to 
 
 To be continued...
