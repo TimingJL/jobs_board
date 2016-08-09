@@ -14,7 +14,7 @@ This time we build a Jobs Board Applicatoin. We're able to add multiple job post
 https://mackenziechild.me/12-in-12/7/         
 
 
-
+![image](https://github.com/TimingJL/jobs_board/blob/master/pic/jobs_board.jpeg)
 
 ### Highlights of this course
 1. Posts (Jobs)
@@ -246,7 +246,7 @@ In `app/views/jobs/index.html.haml`
 ```
 ![image](https://github.com/TimingJL/jobs_board/blob/master/pic/jobs_list_out.jpeg)
 
-# Delete And Edit(19:08)
+# Delete And Edit
 In our controller `app/controllers/jobs_controller.rb`
 ```ruby
 def update
@@ -396,8 +396,110 @@ end
 ![image](https://github.com/TimingJL/jobs_board/blob/master/pic/filter.jpeg)
 
 
-# Styling
+# Basic Styling
 What we need to do next is styling.
+In `app/assets/stylesheets/application.css.scss`
+```scss
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
 
+@import "bootstrap-sprockets";
+@import "bootstrap";
 
-To be continued...
+* {
+	box-sizing: border-box;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+  background: -webkit-linear-gradient(90deg, #1D976C 10%, #93F9B9 90%);
+  background:    -moz-linear-gradient(90deg, #1D976C 10%, #93F9B9 90%);
+  background:     -ms-linear-gradient(90deg, #1D976C 10%, #93F9B9 90%);
+  background:      -o-linear-gradient(90deg, #1D976C 10%, #93F9B9 90%);
+  background:         linear-gradient(90deg, #1D976C 10%, #93F9B9 90%);
+  font-family: 'Lato', sans-serif;
+}
+
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.navbar-default {
+	background-color: white;
+	border-radius: 0;
+	height: 80px;
+	padding: 15px 0;
+	border: none;
+}
+
+.navbar-brand {
+	text-transform: uppercase;
+	letter-spacing: -1px;
+	font-size: 2em;
+	font-weight: 300;
+	color: #1D976C !important;
+}
+
+#jobs {
+	.job {
+		padding: 1em 0;
+		border-bottom: 1px solid rgba(250,250,250, 0.5);
+		h2 {
+			font-size: 2.5em;
+			font-weight: 300;
+			margin-bottom: 0;
+			color: white;
+			a {
+				color: white;
+			}
+		}
+		p {
+			color: rgba(250,250,250, 0.5);
+		}
+	}
+}
+
+#links {
+	margin-top: 2em;
+}
+```
+
+In `app/views/jobs/show.html.haml`
+```haml
+#jobs
+	.job
+		%h2= @job.title
+		%p= @job.description
+		%p= @job.company
+		%button.btn.btn-default= link_to "Apply for Job", @job.url
+
+#links
+	= link_to "Back", root_path, class: "btn btn-sm btn-default"
+	= link_to "Edit", edit_job_path(@job), class: "btn btn-sm btn-default"
+	= link_to "Delete", job_path(@job), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-default"
+```
+
+Finished!
