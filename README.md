@@ -4,8 +4,9 @@
 ![Rails version](https://img.shields.io/badge/Rails-v5.0.0-blue.svg)
 ![Ruby version](https://img.shields.io/badge/Ruby-v2.3.1p112-red.svg)
 
-Mackenzie Child's video really inspired me. So I decided to follow all of his rails video tutorial to learn how to build a web app. Through the video, I would try to build the web app by my self and record the courses step by step in text to facilitate the review.
+Mackenzie Child's video really inspired me. So I decided to follow all of his rails video tutorial to learn how to build a web app. Through the video, I would try to build the web app by my self and record the courses step by step in text to facilitate the review.             
 
+![image](https://github.com/TimingJL/jobs_board/blob/master/pic/machenziechild.jpeg)
 
 # Project 7: How To Build A Jobs Board With Rails       
 This time we build a Jobs Board Applicatoin. We're able to add multiple job postings and categories. We have four different categories like full-time, part-time, freelance, and consultant. We have the ability to Add, Edit, Destroy jobs postings and each job post is assigned to a category, and we are able to filter between the various categories to see only jobs within that category.
